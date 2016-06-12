@@ -69,6 +69,9 @@ alias tmcopy='reattach-to-user-namespace pbcopy'
 # Exports
 export EDITOR=vim
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+bindkey -e
+bindkey '^[[1;9C' forward-word
+bindkey '^[[1;9D' backward-word
 
 # Next line MUST be last
 #~/.tmuxonstart
