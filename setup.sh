@@ -1,6 +1,6 @@
 #!/bin/bash
 if [ ! -z `which zsh` ]; then
-    echo "Changing shell to zsh (ctrl c if you aren't a sudoer)"
+    echo "Changing shell to zsh (ctrl-c if you aren't a sudoer, you'll have to change manually later)"
     sudo chsh -s $(which zsh)
 else
     echo "Zsh not installed, do that first"
@@ -11,6 +11,7 @@ git clone https://github.com/wumb0/dotfiles-new
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 cp dotfiles-new/.??* ~
 git clone https://github.com/oskarkrawczyk/honukai-iterm-zsh
+mkdir ~/.oh-my-zsh/custom/themes
 cp honukai-iterm-zsh/honukai.zsh-theme ~/.oh-my-zsh/custom/themes
 rm -rf honukai-iterm-zsh dotfiles-new
 
