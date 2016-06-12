@@ -1,0 +1,12 @@
+#!/bin/bash
+if [ "$TMUX" == "" ]
+then
+    key=""
+    echo "Starting tmux... press a letter to cancel..."
+    echo "Or enter to start tmux"
+    read -t 3 -n 1 key
+    if [ "$key" == "" ]
+    then
+        tmux attach || tmux new
+    fi
+fi
