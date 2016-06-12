@@ -71,4 +71,4 @@ export EDITOR=vim
 export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
 # Next line MUST be last
-~/.tmuxonstart
+#~/.tmuxonstart
