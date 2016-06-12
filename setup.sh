@@ -1,7 +1,7 @@
 #!/bin/bash
 if [ ! -z `which zsh` ]; then
-    echo "Changing shell to zsh"
-    chsh -s $(which zsh)
+    echo "Changing shell to zsh (ctrl c if you aren't a sudoer)"
+    sudo chsh -s $(which zsh)
 else
     echo "Zsh not installed, do that first"
     exit
