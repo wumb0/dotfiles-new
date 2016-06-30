@@ -31,6 +31,11 @@ Bundle 'nelstrom/vim-visual-star-search'
 Bundle 'Lokaltog/vim-easymotion'
 Bundle 'flazz/vim-colorschemes'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'majutsushi/tagbar'
+Bundle 'MarcWeber/vim-addon-local-vimrc'
+Bundle 'PProvost/vim-ps1'
+Bundle 'Valloric/YouCompleteMe'
+Bundle 'jeetsukumaran/vim-buffersaurus'
 
 if vinstall == 1
     :BundleInstall
@@ -137,6 +142,20 @@ let g:jedi#popup_select_first=0
 let g:jedi#popup_on_dot = 0
 autocmd  FileType python let b:did_ftplugin = 1
 autocmd FileType python setlocal completeopt-=preview
+
+"YouCompleteMe
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+
+"Bsgrep prompt
+function! BsgrepRun(arg)
+    let search = input("Search term or regex: ")
+    exec ':Bsgrep' . a:arg . ' ' . search
+endfunction
+nnoremap <leader>/ :call BsgrepRun(" ")<CR>
+nnoremap <leader>? :call BsgrepRun("!")<CR>
+
+"Local vimrc plugin config
+let g:local_vimrc = {'names':['.vimrc', '.vimrc.local'],'hash_fun':'LVRHashOfFile'}"
 
 "Swap saving settings
 if !isdirectory(expand('$HOME/.vim-bak/swap'))
