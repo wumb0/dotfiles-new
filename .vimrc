@@ -36,6 +36,7 @@ Bundle 'MarcWeber/vim-addon-local-vimrc'
 Bundle 'PProvost/vim-ps1'
 Bundle 'Valloric/YouCompleteMe'
 Bundle 'jeetsukumaran/vim-buffersaurus'
+Bundle 'fatih/vim-go'
 
 if vinstall == 1
     :BundleInstall
@@ -153,6 +154,9 @@ function! BsgrepRun(arg)
 endfunction
 nnoremap <leader>/ :call BsgrepRun(" ")<CR>
 nnoremap <leader>? :call BsgrepRun("!")<CR>
+
+"Pymode
+let g:pymode_lint_ignore = "E501,W0401,E262,E261"
 
 "Local vimrc plugin config
 let g:local_vimrc = {'names':['.vimrc', '.vimrc.local'],'hash_fun':'LVRHashOfFile'}"

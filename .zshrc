@@ -73,5 +73,7 @@ bindkey -e
 bindkey '^[[1;9C' forward-word
 bindkey '^[[1;9D' backward-word
 
-# Next line MUST be last
-#~/.tmuxonstart
+#if you don't want to use tmux at all then just set $TMUX above
+if [ -z "$TMUX" ]; then
+    tmux new-session -A -s std
+fi
