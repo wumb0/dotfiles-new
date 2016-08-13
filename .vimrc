@@ -16,6 +16,7 @@ call vundle#rc()
 
 "Bundles
 Bundle 'VundleVim/Vundle.vim'
+Bundle 'Valloric/YouCompleteMe'
 Bundle 'scrooloose/nerdtree'
 Bundle 'Raimondi/delimitmate'
 Bundle 'bling/vim-airline'
@@ -34,9 +35,9 @@ Bundle 'altercation/vim-colors-solarized'
 Bundle 'majutsushi/tagbar'
 Bundle 'MarcWeber/vim-addon-local-vimrc'
 Bundle 'PProvost/vim-ps1'
-Bundle 'Valloric/YouCompleteMe'
 Bundle 'jeetsukumaran/vim-buffersaurus'
 Bundle 'fatih/vim-go'
+Bundle 'MattesGroeger/vim-bookmarks'
 
 if vinstall == 1
     :BundleInstall
@@ -131,6 +132,10 @@ let g:UltiSnipsJumpForwardTrigger="<c-b>"
 let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsListSnippets="<C-a>"
 
+"Vim bookmarks settings
+let g:bookmark_manage_per_buffer = 1
+let g:bookmark_auto_save_file = expand('$HOME/.vim/bookmarks')
+
 " Jedi-Vim Settings
 let g:jedi#use_tabs_not_buffers = 0
 let g:jedi#goto_assignments_command = "<leader>g"
@@ -157,6 +162,16 @@ nnoremap <leader>? :call BsgrepRun("!")<CR>
 
 "Pymode
 let g:pymode_lint_ignore = "E501,W0401,E262,E261"
+
+"Syntastic
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 0
+let g:syntastic_check_on_wq = 0
 
 "Local vimrc plugin config
 let g:local_vimrc = {'names':['.vimrc', '.vimrc.local'],'hash_fun':'LVRHashOfFile'}"
@@ -236,8 +251,17 @@ nnoremap <leader>t :enew<CR>
 nnoremap <leader>l :ls<CR>
 nmap <leader>n :call NERDTreeToggleOrFocus()<CR>
 map \ <Plug>(easymotion-prefix)
+nnoremap <leader>g :call Dirgrep("-I")<CR>
+nnoremap <leader>G :call BsgrepRun("")<CR>
 :command! WQ wq
 :command! Wq wq
 :command! W w
 :command! Q q
 nnoremap ; :
+
+"Misc functions
+"grep RiIn in current dir
+function! Dirgrep(arg)
+    let search = input("Search term or regex: ")
+    exec ':!grep -RIn ' . a:arg . ' "' . search '" .'
+endfunction
