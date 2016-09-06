@@ -255,6 +255,7 @@ nnoremap <leader>g :call Dirgrep("-I")<CR>
 nnoremap <leader>G :call BsgrepRun("")<CR>
 :command! WQ wq
 :command! Wq wq
+:command! Fuck w !sudo tee %
 :command! W w
 :command! Q q
 nnoremap ; :
