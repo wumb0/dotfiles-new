@@ -1,7 +1,7 @@
 set nocompatible
 filetype off
 
-"Vundle setup
+" #################### Vundle setup ####################
 let vinstall=0
 let vundle_readme=expand('~/.vim/bundle/vundle/README.md')
 if !filereadable(vundle_readme)
@@ -14,35 +14,37 @@ endif
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
-"Bundles
-Bundle 'VundleVim/Vundle.vim'
-Bundle 'Valloric/YouCompleteMe'
-Bundle 'scrooloose/nerdtree'
-Bundle 'Raimondi/delimitmate'
-Bundle 'bling/vim-airline'
-Bundle 'bling/vim-bufferline'
-Bundle 'scrooloose/syntastic'
-Bundle 'airblade/vim-gitgutter'
-Bundle 'kien/ctrlp.vim'
-Bundle 'SirVer/ultisnips'
-Bundle 'honza/vim-snippets'
-Bundle 'kien/rainbow_parentheses.vim'
-Bundle 'klen/python-mode' 
-Bundle 'nelstrom/vim-visual-star-search'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'flazz/vim-colorschemes'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'majutsushi/tagbar'
-Bundle 'MarcWeber/vim-addon-local-vimrc'
-Bundle 'PProvost/vim-ps1'
-Bundle 'jeetsukumaran/vim-buffersaurus'
-Bundle 'fatih/vim-go'
-Bundle 'MattesGroeger/vim-bookmarks'
+" #################### Bundles ####################
+Plugin 'VundleVim/Vundle.vim'
+"Bundle 'Valloric/YouCompleteMe'
+Plugin 'scrooloose/nerdtree'
+Plugin 'Raimondi/delimitmate'
+Plugin 'bling/vim-airline'
+Plugin 'bling/vim-bufferline'
+Plugin 'vim-airline/vim-airline-themes'
+Plugin 'scrooloose/syntastic'
+Plugin 'airblade/vim-gitgutter'
+Plugin 'kien/ctrlp.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'luochen1990/rainbow'
+Plugin 'klen/python-mode'
+Plugin 'nelstrom/vim-visual-star-search'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'flazz/vim-colorschemes'
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'majutsushi/tagbar'
+Plugin 'MarcWeber/vim-addon-local-vimrc'
+Plugin 'PProvost/vim-ps1'
+Plugin 'jeetsukumaran/vim-buffersaurus'
+Plugin 'fatih/vim-go'
+Plugin 'MattesGroeger/vim-bookmarks'
 
 if vinstall == 1
     :BundleInstall
 endif
 
+" #################### Vim settings ####################
 "turn filetype back on
 filetype plugin indent on
 
@@ -109,19 +111,90 @@ set infercase           " Case inferred by default
 set hlsearch            " Highlight search things
 set incsearch           " Make search act like search in modern browsers
 
-"Plugin Settings and functions
-function! NERDTreeToggleOrFocus()
-    if expand("%") =~ "NERD_tree"
-        :NERDTreeToggle
-    else
-        call NERDTreeFocus()
-    endif
-endfunction
+"Swap saving settings
+if !isdirectory(expand('$HOME/.vim-bak/swap'))
+    silent !mkdir -p ~/.vim-bak/swap
+endif
+set swapfile
+set directory^=$HOME/.vim-bak/swap//
 
+"File backup saving settings
+if !isdirectory(expand('$HOME/.vim-bak/backup'))
+    silent !mkdir -p ~/.vim-bak/backup
+endif
+set backup
+set writebackup
+set backupdir=~/.vim-bak/backup
+
+"Undo history saving settings
+if !isdirectory(expand('$HOME/.vim-bak/undo'))
+    silent !mkdir -p ~/.vim-bak/undo
+endif
+set undofile
+set undodir^=$HOME/.vim-bak/undo//
+
+"Spellcheck
+if version >= 700
+    set spl=en spell
+    set nospell
+endif
+
+"Folds
+syn sync fromstart
+set foldenable
+set foldmethod=syntax
+set foldlevel=20
+set foldnestmax=10
+autocmd FileType python set foldmethod=indent
+
+"Ignore this list of file extensions
+set wildignore=*.bak
+set wildignore+=*.sw?                               " Vim swap files
+set wildignore+=*.DS_Store                          " OS X bullshit
+set wildignore+=*.spl                               " Compiled spelling word lists
+set wildignore+=*.bmp,*.gif,*.jpg,*.jpeg,*.png      " Binary images
+set wildignore+=.hg,.git,.svn                       " Version control
+set wildignore+=*.orig                              " Merge resolution files
+set wildignore+=*.dll,*.exe,*.o,*.obj,*.manifest    " Compiled object files
+set wildignore+=*.pyc                               " Python byte code
+set wildignore+=migrations                          " Django migrations
+set wildignore+=*.luac                              " Lua byte code
+set wildignore+=*.aux,*.out,*.toc                   " LaTeX intermediate files
+
+" #################### Key Maps ####################
+nnoremap <leader>p :set nopaste!<CR>
+nnoremap <leader>s :set nospell!<CR>
+nnoremap <leader>S :SyntasticReset<CR>
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+nnoremap <leader>. :bnext<CR>
+nnoremap <leader>m :bprev<CR>
+nnoremap <leader>q :bnext <BAR> bd#<CR>
+nnoremap <leader>t :enew<CR>
+nnoremap <leader>l :ls<CR>
+nnoremap <leader>T :call TabToggle()<CR>
+nmap <leader>n :call NERDTreeToggleOrFocus()<CR>
+map \ <Plug>(easymotion-prefix)
+nnoremap <leader>g :call Dirgrep("-i")<CR>
+nnoremap <leader>G :call Dirgrep("")<CR>
+inoremap <S-Tab> <C-O>:bnext<CR>
+nnoremap <S-Tab> :bnext<CR>
+:command! WQ wq
+:command! Wq wq
+:command! Fuck execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+:command! Fuckq execute 'silent! write !sudo tee % >/dev/null' <bar> edit! <bar> q
+:command! W w
+:command! Q q
+nnoremap ; :
+nnoremap <silent> <Space> @=(foldlevel('.')?'za':"\<Space>")<CR>
+vnoremap <Space> zf
+nnoremap <leader>/ :call BsgrepRun(" ")<CR>
+nnoremap <leader>? :call BsgrepRun("!")<CR>
+
+" #################### Plugin Settings and functions ####################
 "Airline settings
 let g:airline#extensions#tabline#enabled = 1
-let g:airline_left_sep = '|'
-let g:airline_right_sep = '|'
+let g:airline_powerline_fonts = 1
+let g:airline_theme='lucius'
 
 "Ctrlp settings
 let g:ctrlp_working_path_mode = 'r'
@@ -146,123 +219,71 @@ let g:jedi#completions_command = "<C-Space>"
 let g:jedi#rename_command = "<leader>r"
 let g:jedi#popup_select_first=0
 let g:jedi#popup_on_dot = 0
-autocmd  FileType python let b:did_ftplugin = 1
-autocmd FileType python setlocal completeopt-=preview
+autocmd FileType python let b:did_ftplugin = 1
+autocmd FileType python let b:did_ftplugin = 1
 
 "YouCompleteMe
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
-"Bsgrep prompt
-function! BsgrepRun(arg)
-    let search = input("Search term or regex: ")
-    exec ':Bsgrep' . a:arg . ' ' . search
-endfunction
-nnoremap <leader>/ :call BsgrepRun(" ")<CR>
-nnoremap <leader>? :call BsgrepRun("!")<CR>
-
 "Pymode
 let g:pymode_lint_ignore = "E501,W0401,E262,E261"
+let g:pymode_rope_lookup_project = 0
+let g:pymode_rope = 0
 
 "Syntastic
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 "Local vimrc plugin config
 let g:local_vimrc = {'names':['.vimrc', '.vimrc.local'],'hash_fun':'LVRHashOfFile'}"
 
-"Swap saving settings
-if !isdirectory(expand('$HOME/.vim-bak/swap'))
-    silent !mkdir -p ~/.vim-bak/swap
-endif
-set swapfile
-set directory^=$HOME/.vim-bak/swap//
+"Rainbow parentheses
+let g:rainbow_active = 1
 
-"File backup saving settings
-if !isdirectory(expand('$HOME/.vim-bak/backup'))
-    silent !mkdir -p ~/.vim-bak/backup
-endif
-set backup
-set writebackup
-set backupdir=~/.vim-bak/backup
-
-"Undo history saving settings
-if !isdirectory(expand('$HOME/.vim-bak/undo'))
-    silent !mkdir -p ~/.vim-bak/undo
-endif
-set undofile
-set undodir^=$HOME/.vim-bak/undo//
-
-
-"Spellcheck
-if version >= 700
-    set spl=en spell
-    set nospell
-endif
-
-"Folds
-syn sync fromstart
-set foldmethod=syntax
-set foldlevel=20
-set foldnestmax=10
-
-"Ignore this list of file extensions
-set wildignore=*.bak
-set wildignore+=*.sw?                               " Vim swap files
-set wildignore+=*.DS_Store                          " OS X bullshit
-set wildignore+=*.spl                               " Compiled spelling word lists
-set wildignore+=*.bmp,*.gif,*.jpg,*.jpeg,*.png      " Binary images
-set wildignore+=.hg,.git,.svn                       " Version control
-set wildignore+=*.orig                              " Merge resolution files
-set wildignore+=*.dll,*.exe,*.o,*.obj,*.manifest    " Compiled object files
-set wildignore+=*.pyc                               " Python byte code
-set wildignore+=migrations                          " Django migrations
-set wildignore+=*.luac                              " Lua byte code
-set wildignore+=*.aux,*.out,*.toc                   " LaTeX intermediate files
-
-"Statusline
-set statusline=%F%m%r%h%w[%L][%{&ff}]%y[%p%%][%04l,%04v]
-"              | | | | |  |   |      |  |     |    |
-"              | | | | |  |   |      |  |     |    + current column
-"              | | | | |  |   |      |  |     +-- current line
-"              | | | | |  |   |      |  +-- current % into file
-"              | | | | |  |   |      +-- current syntax in square brackets
-"              | | | | |  |   +-- current fileformat
-"              | | | | |  +-- number of lines
-"              | | | | +-- preview flag in square brackets
-"              | | | +-- help flag in square brackets
-"              | | +-- readonly flag in square brackets
-"              | +-- rodified flag in square brackets
-"              +-- full path to file in the buffer
-
-"Key Maps
-nnoremap <leader>p :set nopaste!<CR>
-nnoremap <leader>s :set nospell!<CR>
-nnoremap <silent> <C-l> :nohl<CR><C-l>
-nnoremap <leader>. :bnext<CR>
-nnoremap <leader>m :bprev<CR>
-nnoremap <leader>q :bnext <BAR> bd#<CR>
-nnoremap <leader>t :enew<CR>
-nnoremap <leader>l :ls<CR>
-nmap <leader>n :call NERDTreeToggleOrFocus()<CR>
-map \ <Plug>(easymotion-prefix)
-nnoremap <leader>g :call Dirgrep("-I")<CR>
-nnoremap <leader>G :call BsgrepRun("")<CR>
-:command! WQ wq
-:command! Wq wq
-:command! Fuck w !sudo tee %
-:command! W w
-:command! Q q
-nnoremap ; :
-
-"Misc functions
-"grep RiIn in current dir
+" #################### Misc functions ####################
+"grep R(i)In in current dir
 function! Dirgrep(arg)
     let search = input("Search term or regex: ")
-    exec ':!grep -RIn ' . a:arg . ' "' . search '" .'
+    if search != ""
+        exec ':!grep -RIn ' . a:arg . ' "' . search . '" ' . getcwd()
+    else
+        echoerr "Search cannot be blank"
+    endif
+endfunction
+
+"Toggle tabs or spaces
+function TabToggle()
+  if &expandtab
+    set shiftwidth=8
+    set softtabstop=0
+    set noexpandtab
+  else
+    set shiftwidth=4
+    set softtabstop=4
+    set expandtab
+  endif
+endfunction
+
+"Nerd tree toggle/focus function
+function! NERDTreeToggleOrFocus()
+    if expand("%") =~ "NERD_tree"
+        :NERDTreeToggle
+    else
+        call NERDTreeFocus()
+    endif
+endfunction
+
+"Bsgrep prompt
+function! BsgrepRun(arg)
+    let search = input("Search term or regex: ")
+    if search != ""
+        exec ':Bsgrep' . a:arg . ' ' . search
+    else
+        echoerr "Search cannot be blank"
+    endif
 endfunction
