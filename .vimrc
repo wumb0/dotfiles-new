@@ -250,7 +250,11 @@ let g:rainbow_active = 1
 function! Dirgrep(arg)
     let search = input("Search term or regex: ")
     if search != ""
-        exec ':!grep -RIn ' . a:arg . ' "' . search . '" ' . getcwd()
+        if executable("rg")
+            exec ':!rg ' . a:arg . ' "' . search . '" ' . getcwd()
+        else
+            exec ':!grep -RIn ' . a:arg . ' "' . search . '" ' . getcwd()
+        endif
     else
         echoerr "Search cannot be blank"
     endif
